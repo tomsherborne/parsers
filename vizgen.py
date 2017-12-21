@@ -37,7 +37,7 @@ from graphviz import Digraph
 # print(' '.join([w.word for w in sentence]))
 
 IndexedWord = namedtuple('IndexedWord','word index')
-DependencyArc = namedtuple('DependencyArc','start_word end_word label index')
+DependencyArc = namedtuple('DependencyArc','start_word end_word label')
 stanford_re = r'(\(|\)|,| )'
 filter_out = ['','(',')','.',',',' ']
 
@@ -117,21 +117,49 @@ postamble = r'''
 def generate_tikz_stanford(input_string):
 	dmp_file = open('./dmp.tex','w')
 	dmp_file.writelines(preamble)
-	dmp_file.writelines(postamble)
-	dmp_file.close()
+
+	words = set()
+	deparcs = []
 
 	for line in input_string.splitlines():
 		elems = [e for e in re.split(stanford_re, line) if e not in filter_out]
-		words = []
+		new_arc = []
 		for word in elems[1:]:
 			word_elems = word.split('-')
 			new_word = IndexedWord(word_elems[0],int(word_elems[1]))
-			words.append(new_word)
+			new_arc.append(new_word)
+			words.add(new_word)
 
-		words_formatted = ['({}) {}'.format(w.index,w.word) for w in words]
-		g.edge(words_formatted[0],words_formatted[1],label=elems[0])
+		deparcs.append(DependencyArc(new_arc[0],new_arc[1],elems[0]))
+		#words_formatted = ['({}) {}'.format(w.index,w.word) for w in words]
+		#g.edge(words_formatted[0],words_formatted[1],label=elems[0])
 
-	return None
+	print(deparcs)
+	print(words)
+	words_sorted = sorted(list(words), key=lambda x: x.index)
+	ordered_sentence = [w.word for w in words_sorted]
+	sent_str = ' \& '.join(ordered_sentence[1:]) + " \\\\\n"
+	dmp_file.writelines('\\begin{deptext}\n')
+	dmp_file.writelines(sent_str)
+	dmp_file.writelines('\\end{deptext}\n')
+	
+	for arc in deparcs:
+		print(arc)
+		start = arc.start_word.index
+		print(start)
+		end = arc.end_word.index
+		print(end)
+		label = arc.label
+		print(label)
+		arc_str = u"\\depedge{%d}{%d}{%s}\n"%(start,end,label)
+		print(arc_str)
+		dmp_file.writelines(arc_str)
+
+	dmp_file.writelines(postamble)
+	dmp_file.close()
+
+
+	return ordered_sentence
 
 if __name__ == '__main__':
 
