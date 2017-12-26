@@ -99,3 +99,18 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# latex
+*.aux
+*.log
+*.tex
+*.sty
+*.pdf
+*.png
+
+# Custom
+.DS_Store
+src-parsers/
+*.lock
+*.gv
+
