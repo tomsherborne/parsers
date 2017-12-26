@@ -6,9 +6,9 @@ if [ "`basename $(pwd)`" == "parsers" ];
 fi
 
 cp_loc="$(pwd)/src-parsers/stanford-parser-full-2017-06-09"
-input_file_loc="$(pwd)/input_raw.txt"
-output_file_loc_pcfg="$(pwd)/pcfg_stanford_parse_output.txt"
-output_file_loc_nn="$(pwd)/nn_stanford_parse_output.txt"
+input_file_loc="$(pwd)/input/input_raw.txt"
+output_file_loc_pcfg="$(pwd)/output/pcfg_stanford_parse_output.txt"
+output_file_loc_nn="$(pwd)/output/nn_stanford_parse_output.txt"
 
 $cp_loc/lexparser.sh $input_file_loc >> $output_file_loc_pcfg
 
