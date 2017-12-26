@@ -1,9 +1,14 @@
 #!/bin/bash
  
+if [ "`basename $(pwd)`" == "parsers" ]; 
+	then    echo "Dir correct for parsing";
+	else	echo "Dir incorrect for parsing";exit; 
+fi
+
 cp_loc="$(pwd)/src-parsers/stanford-parser-full-2017-06-09"
-input_file_loc="./input_raw.txt"
-output_file_loc_pcfg="./pcfg_stanford_parse_output.txt"
-output_file_loc_nn="./nn_stanford_parse_output.txt"
+input_file_loc="$(pwd)/input_raw.txt"
+output_file_loc_pcfg="$(pwd)/pcfg_stanford_parse_output.txt"
+output_file_loc_nn="$(pwd)/nn_stanford_parse_output.txt"
 
 $cp_loc/lexparser.sh $input_file_loc >> $output_file_loc_pcfg
 
