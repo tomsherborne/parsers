@@ -4,38 +4,6 @@ from collections import namedtuple
 
 from graphviz import Digraph
 
-# IndexedWord = namedtuple('IndexedWord','word index')
-# filter_out = ['','(',')','.',',',' ']
-
-# g = Digraph()
-# g.attr('edge',dir='forward')
-# g.attr('node',shape='plaintext')
-
-# sentence = set()
-
-# for line in deps.splitlines():
-# 	elems = [e for e in re.split(r'(\(|\)|,| )', line) if e not in filter_out]
-# 	rel = elems[0]
-
-# 	words = []
-# 	for word in elems[1:]:
-# 		print(word)
-# 		word_elems = word.split('-')
-# 		new_word = IndexedWord(word_elems[0],int(word_elems[1]))
-# 		sentence.add(new_word)
-# 		words.append(new_word)
-
-# 	words_formatted = ['({}) {}'.format(w.index,w.word) for w in words]
-# 	print(words_formatted)
-
-# 	g.edge(words_formatted[0],words_formatted[1],label=rel)
-
-# print(g.source)
-# g.view()
-# sentence = list(sentence)
-# sentence.sort(key=lambda w: w.index, reverse=False)
-# print(' '.join([w.word for w in sentence]))
-
 IndexedWord = namedtuple('IndexedWord','word index')
 DependencyArc = namedtuple('DependencyArc','start_word end_word label')
 stanford_re = r'(\(|\)|,| )'
@@ -86,17 +54,6 @@ def candc_generator(input_string):
 		g.edge(words_formatted[0],words_formatted[1],label=elems[0])
 
 	return g
-
-
-
-# \begin{deptext}
-# My \& dog \& also \& likes \& eating \& sausage \\
-# \end{deptext}
-# \depedge{2}{1}{poss}
-# \depedge{4}{2}{nsubj}
-# \depedge{4}{3}{advmod}
-# \depedge{4}{5}{xcomp}
-# \depedge{5}{6}{dobj}
 
 preamble = r'''
 \documentclass{article}
