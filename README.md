@@ -2,23 +2,24 @@
 A review of dependency parsing (Stanford, C&amp;C CCG and spaCy)
 
 ## Requires
-* spaCy
+* spaCy parser
 ```
 pipenv install spacy
 ```
-then
+followed by
 ```
 pipenv run python -m spacy download en
-
 ```
-* GraphViz
-* A working LaTex installation including tikz-dependency.sty 
-* Python 3.5
+* GraphViz for Python for producing graph based visualisations
+```
+pip install graphviz
+```
+* A LaTeX installation including `tikz-dependency.sty` 
 * A `src-parsers` folder containing the parsers e.g.
 ```
-parsers 
-	-> src-parsers 
+parsers \
+	-> src-parsers \
 		-> candc-1.00
-	    -> stanford-parser-full-2017-06-09
-
+		
+		-> stanford-parser-full-2017-06-09
 ```
