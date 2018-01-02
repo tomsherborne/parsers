@@ -288,4 +288,3 @@ case(monument-13, on-11)
 det(monument-13, the-12)
 nmod(telescope-10, monument-13)
 punct(saw-2, .-14)
-

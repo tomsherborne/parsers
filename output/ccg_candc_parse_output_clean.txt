@@ -239,4 +239,3 @@
 (ncsubj continue_30 students_9 _)
 (ncsubj continue_30 faculty_7 _)
 (ncmod _ can_10 Instead_0)
-

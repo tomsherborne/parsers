@@ -242,4 +242,3 @@
 (ncsubj focus_11 students_9 _)
 (ncsubj focus_11 faculty_7 _)
 (ncmod _ can_10 Instead_0)
-
