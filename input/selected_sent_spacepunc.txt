@@ -1,0 +1,21 @@
+The old car broke down in the car park .
+
+The horses were broken in and ridden in two weeks .
+
+It was my aunt’s car which we sold at auction last year in February .
+
+The only rabbit that I ever liked was eaten by my parents one summer .
+
+It wo n’t rain but there might be snow on high ground if the temperature stays about the same over the next 24 hours .
+
+The slightly simplified version of the Viterbi algorithm that we present takes as input a single HMM and a sequence of observed words O = ( o1, o2, ...oT ) and returns the most probable state/tag sequence Q = ( q1, q2, qT ) together with its probability .
+
+Thus the EM-trained "pure HMM" tagger is probably best suited to cases where no training data is available, for example, when tagging languages for which no data was previously hand-tagged .
+
+Skill without imagination is craftsmanship and gives us many useful objects such as wickerwork picnic baskets. Imagination without skill gives us modern art .
+
+An MoD spokesman said : " Surveys of Astute have now been completed and she will proceed to Faslane under her own power . She is being escorted by tugs and HMS Shoreham . "
+
+Instead of constantly worrying about funding, the faculty and students can focus on their project, with the exception of sponsors’ weeks, when they have to convince companies to start or continue their support .
+
+Sam saw the man in the park with the telescope on the monument .
