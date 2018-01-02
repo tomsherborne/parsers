@@ -17,3 +17,4 @@ if __name__ == '__main__':
 		arcs.add(newArc)
 		print(newArc)
 		print()
+
