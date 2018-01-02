@@ -113,4 +113,9 @@ ENV/
 src-parsers/
 *.lock
 *.gv
+*.md5
+*.auxlock
+*.fdb_latexmk
+*.fls
+*.synctex.gz
 
