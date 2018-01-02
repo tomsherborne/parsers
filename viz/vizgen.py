@@ -1,3 +1,5 @@
+# Documentation https://mirror.hmc.edu/ctan/graphics/pgf/contrib/tikz-dependency/tikz-dependency-doc.pdf
+
 import string
 import re 
 from collections import namedtuple
