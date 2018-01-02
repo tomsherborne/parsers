@@ -15,7 +15,6 @@ input_punc_file_loc="$(pwd)/input/selected_sent_spacepunc.txt"
 output_punc_file_loc="$(pwd)/output/ccg_candc_parse_punc_output.txt"
 log_punc_file_loc="$(pwd)/output/ccg_candc_parse_punc_stats.txt"
 
-
 $bin_loc/candc --candc-trans_brackets=true --candc-printer=grs --candc-decoder=derivs --models $model_loc --input $input_file_loc --output $output_file_loc --log $log_file_loc
 
 $bin_loc/candc --candc-trans_brackets=true --candc-printer=grs --candc-decoder=derivs --models $model_loc --input $input_punc_file_loc --output $output_punc_file_loc --log $log_punc_file_loc
