@@ -29,14 +29,19 @@ fig_postamble = r'''
 '''
 
 
-def _generate_arcs(elems):
+def _generate_arcs(elems,type):
 	new_arc = []
 	
 	label = elems[0]
 	is_root = True if elems[0]=='root' else False
 
-	startw = IndexedWord(elems[1],elems[2])
-	endw = IndexedWord(elems[3],elems[4])
+	if type=='candc':
+		offset=1
+	else:
+		offset=0
+
+	startw = IndexedWord(elems[1],int(elems[2])+offset)
+	endw = IndexedWord(elems[3],int(elems[4])+offset)
 
 	return DependencyArc(startw,endw,label,is_root)
 
@@ -68,7 +73,7 @@ def generate_dep_arcs_stanford(input_string):
 		for w in arc_words:
 			arc_parts += w.rsplit('-',1)
 		
-		new_arc = _generate_arcs(arc_parts)
+		new_arc = _generate_arcs(arc_parts,'stanford')
 
 		words.add(IndexedWord(arc_parts[1],int(arc_parts[2])))
 		words.add(IndexedWord(arc_parts[3],int(arc_parts[4])))
@@ -100,13 +105,13 @@ def generate_dep_arcs_candc(input_string):
 		elif elems[0]=='xcomp':
 			if elems[1]!='_':
 				parts = elems[1].rsplit('_',1)
-				words.add(IndexedWord(parts[0],int(parts[1])))
+				words.add(IndexedWord(parts[0],int(parts[1])+1))
 				elems[0]='xcomp:{}'.format(parts[0])
 			del elems[1]
 		if elems[0]=='cmod':
 			if elems[1]!='_':
 				parts = elems[1].rsplit('_',1)
-				words.add(IndexedWord(parts[0],int(parts[1])))
+				words.add(IndexedWord(parts[0],int(parts[1])+1))
 				elems[0]='cmod:{}'.format(parts[0])
 				del[elems[1]]
 		elif len(elems)==4:
@@ -119,9 +124,9 @@ def generate_dep_arcs_candc(input_string):
 			parts = [part for part in w.rsplit('_',1) if part is not '']
 			arc_parts+=parts
 
-		new_arc = _generate_arcs(arc_parts)
-		words.add(IndexedWord(arc_parts[1],int(arc_parts[2])))
-		words.add(IndexedWord(arc_parts[3],int(arc_parts[4])))
+		new_arc = _generate_arcs(arc_parts,'candc')
+		words.add(IndexedWord(arc_parts[1],int(arc_parts[2])+1))
+		words.add(IndexedWord(arc_parts[3],int(arc_parts[4])+1))
 
 		dep_arcs.append(new_arc)
 
