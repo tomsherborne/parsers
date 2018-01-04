@@ -1,4 +1,4 @@
-The space between This and And and And and That is different. Please fix it.
+The space between This and And and And and That is different. 
 
 Buffalo buffalo Buffalo buffalo buffalo buffalo Buffalo buffalo.
 
