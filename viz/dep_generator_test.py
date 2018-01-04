@@ -3,11 +3,8 @@ import string
 import re 
 from collections import namedtuple
 
-
 IndexedWord = namedtuple('IndexedWord','word index')
 DependencyArc = namedtuple('DependencyArc','start_word end_word label is_root')
-stanford_re = r'(\(|\)|,)'
-filter_out = ['','(',')','.',',',' ']
 
 doc_preamble = r'''
 \documentclass{article}
@@ -28,7 +25,6 @@ fig_postamble = r'''
 \end{dependency}
 '''
 
-
 def _generate_arcs(elems,type):
 	new_arc = []
 	
@@ -44,16 +40,6 @@ def _generate_arcs(elems,type):
 	endw = IndexedWord(elems[3],int(elems[4])+offset)
 
 	return DependencyArc(startw,endw,label,is_root)
-
-	# for word in elems[1:]:
-	# 	#word_elems = word.replace('_','-').split('-')
-	# 	word_elems = [w for w in word_elems if w is not '' or not ' ']
-	# 	#print(word_elems)
-	# 	new_word = IndexedWord(word_elems[0],int(word_elems[1]))
-	# 	new_arc.append(new_word)
-	# 	new_words.add(new_word)
-	# is_root = True if elems[0]=='root' else False
-	#return DependencyArc(new_arc[0],new_arc[1],elems[0],is_root),new_words
 
 def generate_dep_arcs_stanford(input_string):
 	'''
@@ -191,18 +177,18 @@ def write_tex_doc(sent,dep_arcs,full_dir,filename):
 if __name__ == '__main__':
 
     parses = [
-    {'dir':'/Users/tom/Desktop/Cambridge/L95-SyntaxParsing/parsers/output/pcfg_stanford_parse_output.txt',
-    'output':'/Users/tom/Desktop/Cambridge/L95-SyntaxParsing/parsers/output/stanford-pcfg-tex',
+    {'dir':'/Users/tom/Desktop/Cambridge/L95-SyntaxParsing/parsers/output-2/pcfg_stanford_parse_output.txt',
+    'output':'/Users/tom/Desktop/Cambridge/L95-SyntaxParsing/parsers/output-2/stanford-pcfg-tex',
     'type':'stanford'},
-    {'dir':'/Users/tom/Desktop/Cambridge/L95-SyntaxParsing/parsers/output/nn_stanford_parse_output.txt',
-    'output':'/Users/tom/Desktop/Cambridge/L95-SyntaxParsing/parsers/output/stanford-nn-tex',
+    {'dir':'/Users/tom/Desktop/Cambridge/L95-SyntaxParsing/parsers/output-2/nn_stanford_parse_output.txt',
+    'output':'/Users/tom/Desktop/Cambridge/L95-SyntaxParsing/parsers/output-2/stanford-nn-tex',
      'type':'stanford'},
-	{'dir':'/Users/tom/Desktop/Cambridge/L95-SyntaxParsing/parsers/output/ccg_candc_parse_output_clean.txt',
-	 'output':'/Users/tom/Desktop/Cambridge/L95-SyntaxParsing/parsers/output/candc-raw-tex',
+	{'dir':'/Users/tom/Desktop/Cambridge/L95-SyntaxParsing/parsers/output-2/ccg_candc_parse_output.txt',
+	 'output':'/Users/tom/Desktop/Cambridge/L95-SyntaxParsing/parsers/output-2/candc-raw-tex',
 	 'type':'candc'},
-	{'dir':'/Users/tom/Desktop/Cambridge/L95-SyntaxParsing/parsers/output/ccg_candc_parse_punc_output_clean.txt',
-	 'output':'/Users/tom/Desktop/Cambridge/L95-SyntaxParsing/parsers/output/candc-punc-tex',
-	 'type':'candc'}
+	#{'dir':'/Users/tom/Desktop/Cambridge/L95-SyntaxParsing/parsers/output-2/ccg_candc_parse_punc_output_clean.txt',
+	# 'output':'/Users/tom/Desktop/Cambridge/L95-SyntaxParsing/parsers/output-2/candc-punc-tex',
+	# 'type':'candc'}
     ]
 
     for parse in parses:
