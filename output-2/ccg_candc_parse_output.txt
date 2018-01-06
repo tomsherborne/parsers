@@ -32,3 +32,8 @@
 (dobj saw_1 man_3)
 (ncsubj saw_1 Sam_0 _)
 
+(dobj from_2 Paris_3)
+(ncmod _ flew_1 from_2)
+(dobj to_4 Geneva._5)
+(ncmod _ flew_1 to_4)
+(ncsubj flew_1 Kim_0 _)

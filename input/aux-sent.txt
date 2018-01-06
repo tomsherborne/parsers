@@ -1,3 +1,5 @@
+For example when writing languages for which there is no alphabet
+
 The space between This and And and And and That is different. 
 
 Buffalo buffalo Buffalo buffalo buffalo buffalo Buffalo buffalo.
