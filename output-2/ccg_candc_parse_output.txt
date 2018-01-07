@@ -37,3 +37,12 @@
 (dobj to_4 Geneva._5)
 (ncmod _ flew_1 to_4)
 (ncsubj flew_1 Kim_0 _)
+
+But far fewer people fully understand how the Media Lab operates, fits into MIT, and encourages such a creative environment; about half of the anniversary celebration’s program focused on simply defining what the Media Lab is.
+21 attempt nospan at B=0.075, K=20
+21 attempt nospan at B=0.03, K=20
+21 attempt nospan at B=0.01, K=20
+21 attempt nospan at B=0.005, K=20
+21 attempt nospan at B=0.001, K=150
+21 failed no span at B=0.001, K=150
+<c> But|but|CC|O|O|S/S far|far|RB|I-NP|O|(N/N)/(N/N) fewer|fewer|JJR|I-NP|O|N/N people|people|NNS|I-NP|O|N fully|fully|RB|I-ADVP|O|(S\NP)/(S\NP) understand|understand|VBP|I-VP|O|(S[dcl]\NP)/S[qem] how|how|WRB|I-ADVP|O|S[qem]/S[dcl] the|the|DT|I-NP|O|NP[nb]/N Media|Media|NNP|I-NP|I-ORG|N/N Lab|Lab|NNP|I-NP|I-ORG|N/N operates,|operates,|NNP|I-NP|I-ORG|N fits|fit|VBZ|I-VP|O|S[dcl]\NP into|into|IN|I-PP|O|((S\NP)\(S\NP))/NP MIT,|MIT,|NNP|I-NP|O|N and|and|CC|O|O|conj encourages|encourage|VBZ|I-VP|O|(S[dcl]\NP)/NP such|such|JJ|I-NP|O|NP/NP a|a|DT|I-NP|O|NP[nb]/N creative|creative|JJ|I-NP|O|N/N environment;|environment;|NN|I-NP|O|N about|about|IN|I-NP|O|(NP\NP)/NP half|half|NN|I-NP|O|N of|of|IN|I-PP|O|(NP\NP)/NP the|the|DT|I-NP|O|NP[nb]/N anniversary|anniversary|NN|I-NP|O|N/N celebration’s|celebration’s|NNS|I-NP|O|N/N program|program|NN|I-NP|O|N focused|focus|VBD|I-VP|O|(S[dcl]\NP)/PP on|on|IN|I-PP|O|PP/NP simply|simply|RB|I-ADVP|O|(S\NP)/(S\NP) defining|define|VBG|I-VP|O|(S[ng]\NP)/NP what|what|WP|I-NP|O|NP/(S[dcl]/NP) the|the|DT|B-NP|O|NP[nb]/N Media|Media|NNP|I-NP|I-ORG|N/N Lab|Lab|NNP|I-NP|I-ORG|N/N is.|is.|NN|I-NP|I-ORG|N
