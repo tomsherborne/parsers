@@ -6,9 +6,9 @@ if [ "`basename $(pwd)`" == "parsers" ];
 fi
 
 cp_loc="$(pwd)/src-parsers/stanford-parser-full-2017-06-09"
-input_file_loc="$(pwd)/input/aux-sent.txt"
-output_file_loc_pcfg="$(pwd)/output-2/pcfg_stanford_parse_output.txt"
-output_file_loc_nn="$(pwd)/output-2/nn_stanford_parse_output.txt"
+input_file_loc="$(pwd)/input/input_raw.txt"
+output_file_loc_pcfg="$(pwd)/output/pcfg_stanford_parse_output.txt"
+output_file_loc_nn="$(pwd)/output/nn_stanford_parse_output.txt"
 
 java -mx200m -cp "$cp_loc/*" edu.stanford.nlp.parser.lexparser.LexicalizedParser  -model edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz -outputFormat "typedDependencies" -outputFormatOptions includePunctuationDependencies $input_file_loc > $output_file_loc_pcfg
 

@@ -1,6 +1,6 @@
 # parsers
 ## Tom Sherborne Dec 2017
-A review of dependency parsing (Stanford PCFG and RNN, C&amp;C CCG and ~spaCy~)
+A review of dependency parsing (Stanford PCFG and NNdep, C&amp;C CCG)
 I use `pipenv` where one could use `pip`, but I would recommend in a `virtualenv` or `conda env`
 
 ## Folders
@@ -13,14 +13,6 @@ I use `pipenv` where one could use `pip`, but I would recommend in a `virtualenv
 ```
 
 ## Requirements
-* spaCy parser **spacy is currently not working**
-```
-pipenv install spacy
-```
-followed by
-```
-pipenv run python -m spacy download en
-```
 * GraphViz for Python for producing graph based visualisations
 ```
 pipenv install graphviz
@@ -34,3 +26,16 @@ pipenv install graphviz
 		
 		-> stanford-parser-full-2017-06-09
 ```
+* spaCy parser **spacy is currently 'unsupported'**
+```
+pipenv install spacy
+```
+followed by
+```
+pipenv run python -m spacy download en
+```
+
+## Todo
+* [x] Refactor `tikz-dependency` arc generator with comments
+* [ ] File writing safety checks
+* [ ] Fix offset bug which causes C&C parse graph generator to orphan words

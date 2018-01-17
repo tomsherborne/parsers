@@ -3,7 +3,6 @@ import sys
 from collections import namedtuple
 
 if __name__ == '__main__':
-
 	IndexedWord = namedtuple('IndexedWord','word index')
 	DependencyArc = namedtuple('DependencyArc','start_word end_word label')
 	

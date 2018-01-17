@@ -1,10 +1,12 @@
 # Documentation https://mirror.hmc.edu/ctan/graphics/pgf/contrib/tikz-dependency/tikz-dependency-doc.pdf
 import string
 import re 
+import os
 from collections import namedtuple
 
-IndexedWord = namedtuple('IndexedWord','word index')
-DependencyArc = namedtuple('DependencyArc','start_word end_word label is_root')
+IndexedWord 	= namedtuple('IndexedWord','word index')
+DependencyArc	= namedtuple('DependencyArc','start_word end_word label is_root')
+ParseConfig 	= namedtuple('ParseConfig','dir output type')
 
 doc_preamble = r'''
 \documentclass{article}
@@ -25,21 +27,20 @@ fig_postamble = r'''
 \end{dependency}
 '''
 
-def _generate_arcs(elems,type):
-	new_arc = []
-	
-	label = elems[0]
+def _generate_arcs(elems,parse_type):
+	'''
+	Generate dependency arc from words and indices
+	Check for the sentential semantic root for Stanford parsers
+	Check for C&C parser and add a +1 offset as parse indexes from 0
+	'''	
+
 	is_root = True if elems[0]=='root' else False
+	offset  = 1 if parse_type=='candc' else 0
 
-	if type=='candc':
-		offset=1
-	else:
-		offset=0
+	startw 	= IndexedWord(elems[1],int(elems[2])+offset)
+	endw 	= IndexedWord(elems[3],int(elems[4])+offset)
 
-	startw = IndexedWord(elems[1],int(elems[2])+offset)
-	endw = IndexedWord(elems[3],int(elems[4])+offset)
-
-	return DependencyArc(startw,endw,label,is_root)
+	return DependencyArc(startw,endw,elems[0],is_root)
 
 def generate_dep_arcs_stanford(input_string):
 	'''
@@ -135,90 +136,146 @@ def handle_root_arc(sent,dep_arcs):
 	
 
 def make_plain_sent(sent,text_options):
-	sent_str = ' \& '.join([w.word for w in sent]) + ' \\\\'
+	'''
+	Generate tikz format string object of sentence
+	Arcs are then added as annotations to this sentence
+	params:
+	@sent 	:list of IndexedWord objects representing parsed sentence
+	@text_options: text style options
+	output:
+	@str 	:output string of sentence
+	'''
+
+	# form string as tokens with \& between and ending in \\
+	sent_str = ' \& '.join([w.word for w in sent]) + '\\\\'
+
 	return '{}[{}]\n{}\n{}\n'.format(
 		'\\begin{deptext}',
 		text_options,
 		sent_str,
-		'\\end{deptext}')
+		'\\end{deptext}'
+		)
 
 
 def make_dep_arcs(dep_arcs):
+	'''
+	Generate tikz format string object of every dependency arc
+	params:
+	@dep_arcs: list of DependencyArc objects
+	output:
+	arc_str:  string object of every arc tex object
+	'''
+
+	# start with empty string
 	arc_str = ''
 
+	# iterate over each arc
 	for arc in dep_arcs:
+
+		# starting index
 		start = arc.start_word.index
+
+		# ending index
 		end = arc.end_word.index
+
+		# Typed Dependency Grammar (RASP or Universal) label
 		label = arc.label
+
+		# Form string
 		current_arc_str = u"\\depedge{%s}{%s}{%s}\n"%(start,end,label)
 		arc_str += current_arc_str
 
 	return arc_str
 
-def write_tex_fig(sent,dep_arcs,full_dir,filename,text_options):
-	file = open('{}/{}'.format(full_dir,filename),'w+')
+def write_tex_fig(sent,dep_arcs,full_dir,filename,doc,text_options):
+	'''
+	Generate a tikz-dependency figure @full_dir
+	params:
+	@sent : 	list of IndexedWord objects representing parsed sentence
+	@dep_arcs: 	list of dependency arcs annotating sentence
+	@full_dir: 	location of file.tex
+	@doc: 		generate full document (add doc post+preamble)
+	@text_options: add style options
+	'''
+	file = open('{}/{}'.format(full_dir,filename),'w')
+
+	# dump document opening object
+	if doc:
+		file.writelines(doc_preamble)
+
+	# dump figure preample
 	file.writelines(fig_preamble)
 
+	# generate root if exists
 	sent,dep_arcs,root_str = handle_root_arc(sent,dep_arcs)
+
+	# generate sentence object for arcs to annotate
 	sent_str = make_plain_sent(sent,text_options)
+
+	# generate dep arc annotations
 	arcs = make_dep_arcs(dep_arcs)
 	
+	# add sentence, dep arcs and root
 	file.writelines(sent_str)
 	file.writelines(root_str)
 	file.writelines(arcs)
 
+	# add figure postamble
 	file.writelines(fig_postamble)
 	file.close()
 
-def write_tex_doc(sent,dep_arcs,full_dir,filename):
-	pass
-
-
 if __name__ == '__main__':
 
+	# get parent folder (parsers project root)
+	root_dir = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
+
+	# declare parsing objects
     parses = [
-    {'dir':'/Users/tom/Desktop/Cambridge/L95-SyntaxParsing/parsers/output-2/pcfg_stanford_parse_output.txt',
-    'output':'/Users/tom/Desktop/Cambridge/L95-SyntaxParsing/parsers/output-2/stanford-pcfg-tex',
-    'type':'stanford'},
-    {'dir':'/Users/tom/Desktop/Cambridge/L95-SyntaxParsing/parsers/output-2/nn_stanford_parse_output.txt',
-    'output':'/Users/tom/Desktop/Cambridge/L95-SyntaxParsing/parsers/output-2/stanford-nn-tex',
-     'type':'stanford'},
-	{'dir':'/Users/tom/Desktop/Cambridge/L95-SyntaxParsing/parsers/output-2/ccg_candc_parse_output.txt',
-	 'output':'/Users/tom/Desktop/Cambridge/L95-SyntaxParsing/parsers/output-2/candc-raw-tex',
-	 'type':'candc'},
-	#{'dir':'/Users/tom/Desktop/Cambridge/L95-SyntaxParsing/parsers/output-2/ccg_candc_parse_punc_output_clean.txt',
-	# 'output':'/Users/tom/Desktop/Cambridge/L95-SyntaxParsing/parsers/output-2/candc-punc-tex',
-	# 'type':'candc'}
+    ParseConfig(
+    	'output/pcfg_stanford_parse_output.txt',
+    	'output/stanford-pcfg-tex',
+    	'stanford'
+    	),
+
+    ParseConfig(
+    	'output/nn_stanford_parse_output.txt',
+    	'output/stanford-nn-tex',
+    	'stanford'
+    	),
+
+    ParseConfig(
+    	'output/ccg_candc_parse_output.txt',
+    	'output/candc-raw-tex',
+    	'candc'
+    	)
     ]
 
     for parse in parses:
-    	with open(parse['dir'],'r') as fh:
+
+    	# open file with parse results
+    	in_file_path = root_dir + os.sep + parse.dir
+    	with open(in_file_path,'r') as fh:
     		text = fh.read()
+
+    	# split into parsees
     	parse_list = text.split('\n\n')
-    	print(parse['type'])
+
+    	# generate parse graphs for each dep-parse read in
     	for p in parse_list:
-    		print('Running afterparsey for {} of {}'.format(parse_list.index(p),len(parse_list)))
-    		if parse['type']=='stanford':
+    		print('Running AfterParsey for parser{} on parse {} of {}...'.format(parse.type,parse_list.index(p)+1,len(parse_list)))
+
+    		if parse.type=='stanford':
+    			print('fix dep arc calls on 239')
     			sent, dep_arcs = generate_dep_arcs_stanford(p)
-    		elif parse['type']=='candc':
+    		elif parse.type=='candc':
     			sent, dep_arcs = generate_dep_arcs_candc(p)
-    		print(' '.join(w.word for w in sent))
-    		write_tex_fig(sent,dep_arcs,parse['output'],'parse{}.tex'.format(parse_list.index(p)),'column sep=0.5cm')
 
-	#print(sent1)
-	#print()
-	#print(dep_arcs1)
+    		print('Writing TeX fig for parse {} of {}...'.format(parse_list.index(p)+1,len(parse_list)))
+    		print()
+    		print('Sentence recovered from depparse: {} ...'.format(' '.join(w.word for w in sent)))
+    		print()
 
-    # with open(stanford_parse1,'r') as fh:
-    # 	text = fh.read()
+    		out_file_path = root_dir + os.sep + parse.output
 
-    # parses = text.split('\n\n')
-    # for l in parses:
-    # 	print('next parse')
-    # 	print('>>>>>>>>>>>>>>>>>>>>>>>>>')
-    # 	print(l)
-    # 	print('<<<<<<<<<<<<<<<<<<<<<<<<<')
+    		write_tex_fig(sent=sent,dep_arcs=dep_arcs,full_dir=out_file_path,filename='parse{}.tex'.format(parse_list.index(p)+1),doc=False,text_options='column sep=0.3cm')
 
-	#sent1, dep_arcs1 = generate_dep_arcs_stanford(stanford_deps)
-	#print([da for da in dep_arcs1 if da.is_root==True])
-	#write_tex_fig(sent1,dep_arcs1,'/Users/tom/Desktop/Cambridge/L95-SyntaxParsing/parsers/viz/test','test.tex','column sep=0.5cm')
