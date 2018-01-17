@@ -32,8 +32,12 @@ def _generate_arcs(elems,parse_type):
 	Generate dependency arc from words and indices
 	Check for the sentential semantic root for Stanford parsers
 	Check for C&C parser and add a +1 offset as parse indexes from 0
+	params:
+	@elems: List of word parts
+	@parse_type: parser
+	ouput:
+	@DependencyArc(): arc object
 	'''	
-
 	is_root = True if elems[0]=='root' else False
 	offset  = 1 if parse_type=='candc' else 0
 
@@ -42,40 +46,148 @@ def _generate_arcs(elems,parse_type):
 
 	return DependencyArc(startw,endw,elems[0],is_root)
 
-def generate_dep_arcs_stanford(input_string):
+def generate_dep_arcs_candc(input_string):
+# 	'''
+# 	Take list of grammatical relations and return
+# 	1. list of DependencyArc objects
+# 	2. list of IndexedWord objects
+# 	'''
+
+# 	words = set()
+# 	dep_arcs = []
+
+# 	for line in input_string.splitlines():
+# 		arc_parts = []
+# 		elems = list(filter(None, re.split(' ',line[1:len(line)-1],maxsplit=5)))
+
+# 		# Handle special cases
+# 		if elems[0]=='ncsubj':
+# 			elems[0] = elems[0]+':'+elems[-1] if elems[-1]!='_' else elems[0]
+# 			del elems[-1]
+# 		elif elems[0]=='xcomp':
+# 			if elems[1]!='_':
+# 				parts = elems[1].rsplit('_',1)
+# 				words.add(IndexedWord(parts[0],int(parts[1])+1))
+# 				elems[0]='xcomp:{}'.format(parts[0])
+# 			del elems[1]
+# 		if elems[0]=='cmod':
+# 			if elems[1]!='_':
+# 				parts = elems[1].rsplit('_',1)
+# 				words.add(IndexedWord(parts[0],int(parts[1])+1))
+# 				elems[0]='cmod:{}'.format(parts[0])
+# 				del[elems[1]]
+# 		elif len(elems)==4:
+# 			elems[0] = elems[0]+':'+elems[1] if elems[1]!='_' else elems[0]
+# 			del elems[1]
+
+# 		arc_parts.append(elems[0])
+
+# 		for w in elems[1:]:
+# 			parts = [part for part in w.rsplit('_',1) if part is not '']
+# 			arc_parts+=parts
+
+# 		new_arc = _generate_arcs(arc_parts,'candc')
+# 		words.add(IndexedWord(arc_parts[1],int(arc_parts[2])+1))
+# 		words.add(IndexedWord(arc_parts[3],int(arc_parts[4])+1))
+
+# 		dep_arcs.append(new_arc)
+
+# 	words_sorted = sorted(list(words), key=lambda x: x.index)
+# 	return words_sorted,dep_arcs
+
+# def generate_dep_arcs_stanford(input_string):
+# 	'''
+# 	Take list of grammatical relations and return parsed objects
+# 	arc_parts is an intermediate object structured as [label,word1,index1,word2,index2]
+# 	params:
+# 	@input_string: list of dependencies
+# 	output:
+# 	@words_sorted: sorted list of IndexedWord objects
+# 	@dep_arcs: list of DependencyArc objects
+# 	'''
+
+# 	# empty objects
+# 	words = set()
+# 	dep_arcs = []
+
+# 	for line in input_string.splitlines():
+
+# 		arc_parts = []
+
+# 		# get part of dependency relation
+# 		elems = list(filter(None, re.split('[\(\)]+',line,maxsplit=2)))
+
+# 		# append label
+# 		arc_parts.append(elems[0])
+
+# 		# get words in this dependency relation
+# 		arc_words = [w.strip() for w in filter(None, re.split(',',elems[1],maxsplit=1))]
+# 		for w in arc_words:
+# 			# get word and index for each arc constituent
+# 			arc_parts += w.rsplit('-',1)
+		
+# 		# update arc list
+# 		new_arc = _generate_arcs(arc_parts,'stanford')
+# 		dep_arcs.append(new_arc)
+
+# 		# update set of words
+# 		words.add(new_arc.start_word)
+# 		words.add(new_arc.end_word)
+
+# 	# sort words in set of words
+# 	words_sorted = sorted(list(words), key=lambda x: x.index)
+# 	return words_sorted,dep_arcs
+
+
+def arc_parse_stanford(input_string):
 	'''
-	Take list of grammatical relations and return
-	1. list of DependencyArc objects
-	2. list of IndexedWord objects
+	Take list of grammatical relations and return parsed objects STANFORD
+	arc_parts is an intermediate object structured as [label,word1,index1,word2,index2]
+	params:
+	@input_string: list of dependencies
+	output:
+	@words:    list of IndexedWord objects
+	@dep_arcs: list of DependencyArc objects
 	'''
+
+	# empty objects
 	words = set()
 	dep_arcs = []
 
 	for line in input_string.splitlines():
+
 		arc_parts = []
+
+		# get part of dependency relation
 		elems = list(filter(None, re.split('[\(\)]+',line,maxsplit=2)))
+
+		# append label
 		arc_parts.append(elems[0])
 
+		# get words in this dependency relation
 		arc_words = [w.strip() for w in filter(None, re.split(',',elems[1],maxsplit=1))]
 		for w in arc_words:
+			# get word and index for each arc constituent
 			arc_parts += w.rsplit('-',1)
 		
+		# update arc list
 		new_arc = _generate_arcs(arc_parts,'stanford')
-
-		words.add(IndexedWord(arc_parts[1],int(arc_parts[2])))
-		words.add(IndexedWord(arc_parts[3],int(arc_parts[4])))
-
 		dep_arcs.append(new_arc)
 
-	words_sorted = sorted(list(words), key=lambda x: x.index)
-	return words_sorted,dep_arcs
+		# update set of words
+		words.add(new_arc.start_word)
+		words.add(new_arc.end_word)
+	return words,dep_arcs
 
-
-def generate_dep_arcs_candc(input_string):
+def arc_parse_candc(input_string):
 	'''
-	Take list of grammatical relations and return
-	1. list of DependencyArc objects
-	2. list of IndexedWord objects
+	Take list of grammatical relations and return parsed objects CANDC
+	arc_parts is an intermediate object structured as [label,word1,index1,word2,index2]
+	params:
+	@input_string: list of dependencies
+	output:
+	@words:    list of IndexedWord objects
+	@dep_arcs: list of DependencyArc objects
 	'''
 
 	words = set()
@@ -85,7 +197,7 @@ def generate_dep_arcs_candc(input_string):
 		arc_parts = []
 		elems = list(filter(None, re.split(' ',line[1:len(line)-1],maxsplit=5)))
 
-		# Handle special cases
+		# Handle special cases (ncsubj, xcomp, cmod)
 		if elems[0]=='ncsubj':
 			elems[0] = elems[0]+':'+elems[-1] if elems[-1]!='_' else elems[0]
 			del elems[-1]
@@ -116,20 +228,55 @@ def generate_dep_arcs_candc(input_string):
 		words.add(IndexedWord(arc_parts[3],int(arc_parts[4])+1))
 
 		dep_arcs.append(new_arc)
+	return words,dep_arcs
+
+def generate_dep_arcs(input_string,parse_type):
+	'''
+	Take list of grammatical relations and return parsed objects
+	arc_parts is an intermediate object structured as [label,word1,index1,word2,index2]
+	params:
+	@input_string: list of dependencies
+	output:
+	@words_sorted: sorted list of IndexedWord objects
+	@dep_arcs: list of DependencyArc objects
+	'''
+
+	# switch on parser type
+	if parse_type=='stanford':
+		words,dep_arcs = arc_parse_stanford(input_string)
+	elif parse_type=='candc':
+		words,dep_arcs = arc_parse_candc(input_string)
 
 	words_sorted = sorted(list(words), key=lambda x: x.index)
 	return words_sorted,dep_arcs
+
 	
-def handle_root_arc(sent,dep_arcs):
+def make_root_arc(sent,dep_arcs):
+	'''
+	Generate special string for root arc for Stanford parser outputs
+	params:
+	@sent 	:list of IndexedWord objects representing parsed sentence
+	@dep_arcs:list of DependencyArc objects
+	output:
+	@sent   :list of IndexedWord objects representing parsed sentence
+	@dep_arcs:list of Dependency Arcs objects
+	@root_str: tikz TeX object for root arc
+	'''
+
+	# start with empty str
 	root_str = ''
-	root_arcs = [a for a in dep_arcs if a.is_root==True]
+
+	# find any roots in the sentence
+	root_arcs = [arc for arc in dep_arcs if arc.is_root==True]
+
+	# if roots exist generate tikz object 
 	for arc in root_arcs:
 		root_idx = arc.end_word.index
 		root_str += '\\deproot{}{}\n'.format('{'+str(root_idx)+'}','{root}')
 
+	# Trim root from sent and dep_arcs 
 	if sent[0].word=='ROOT':
 		sent = sent[1:]
-
 	dep_arcs = [a for a in dep_arcs if a.is_root==False]
 
 	return sent, dep_arcs, root_str
@@ -207,7 +354,7 @@ def write_tex_fig(sent,dep_arcs,full_dir,filename,doc,text_options):
 	file.writelines(fig_preamble)
 
 	# generate root if exists
-	sent,dep_arcs,root_str = handle_root_arc(sent,dep_arcs)
+	sent,dep_arcs,root_str = make_root_arc(sent,dep_arcs)
 
 	# generate sentence object for arcs to annotate
 	sent_str = make_plain_sent(sent,text_options)
@@ -263,12 +410,8 @@ if __name__ == '__main__':
     	# generate parse graphs for each dep-parse read in
     	for p in parse_list:
     		print('Running AfterParsey for parser{} on parse {} of {}...'.format(parse.type,parse_list.index(p)+1,len(parse_list)))
+    		sent, dep_arcs = generate_dep_arcs(p)
 
-    		if parse.type=='stanford':
-    			print('fix dep arc calls on 239')
-    			sent, dep_arcs = generate_dep_arcs_stanford(p)
-    		elif parse.type=='candc':
-    			sent, dep_arcs = generate_dep_arcs_candc(p)
 
     		print('Writing TeX fig for parse {} of {}...'.format(parse_list.index(p)+1,len(parse_list)))
     		print()
@@ -277,5 +420,5 @@ if __name__ == '__main__':
 
     		out_file_path = root_dir + os.sep + parse.output
 
-    		write_tex_fig(sent=sent,dep_arcs=dep_arcs,full_dir=out_file_path,filename='parse{}.tex'.format(parse_list.index(p)+1),doc=False,text_options='column sep=0.3cm')
+    		#write_tex_fig(sent=sent,dep_arcs=dep_arcs,full_dir=out_file_path,filename='parse{}.tex'.format(parse_list.index(p)+1),doc=False,text_options='column sep=0.3cm')
 
